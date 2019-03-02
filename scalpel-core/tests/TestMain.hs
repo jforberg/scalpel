@@ -447,6 +447,20 @@ scrapeTests = "scrapeTests" ~: TestList [
             (Just ["2"])
             (texts $ "a" // "d" `atDepth` 2)
 
+    -- This case passes
+    ,   scrapeTest
+            "atDepth correctly handles explicitly terminated <li> tags"
+            "<body><ul><li>Li</li></ul><ul><li>La</li></ul></body>"
+            (Just ["Li", "La"])
+            (texts $ "body" // "li" `atDepth` 2)
+
+    -- This case fails
+    ,   scrapeTest
+            "atDepth correctly handles implicitly terminated <li> tags"
+            "<body><ul><li>Li</ul><ul><li>La</ul></body>"
+            (Just ["Li", "La"])
+            (texts $ "body" // "li" `atDepth` 2)
+
     ,   scrapeTest
             "Applicative sanity checks for SerialScraper"
             "<a>1</a><b>2</b><a>3</a>"
